@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright 2010, Darren Lafreniere
+<http://www.lafarren.com/theseus-minotaur-solver/>
+
+This file is part of lafarren.com's Theseus and Minotaur Maze Solver,
+or tmmaze-solver.
+
+tmmaze-solver is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+tmmaze-solver is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmmaze-solver, named License.txt. If not, see
+<http://www.gnu.org/licenses/>.
+-->
+<mx:Application
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:tmmaze="com.lafarren.tmmaze.ui.*"
+	frameRate="60"
+	styleName="plain"
+	applicationComplete="applicationComplete()"
+>
+	<mx:Style source="style.css" />
+	
+	<mx:Script>
+		<![CDATA[
+		import mx.events.CloseEvent;
+		
+		import com.lafarren.tmmaze.ui.GameContainer;
+		import com.lafarren.tmmaze.ui.HelpWizard;
+		
+		private function applicationComplete():void
+		{
+			var helpWizard:HelpWizard = new HelpWizard();
+			addChild(helpWizard);
+			helpWizard.addEventListener(CloseEvent.CLOSE, function(event:CloseEvent):void
+			{
+				removeChild(helpWizard);
+				
+				var gameContainer:GameContainer = new GameContainer();
+				addChild(gameContainer);
+			});
+		}
+		]]>
+	</mx:Script>
+</mx:Application>

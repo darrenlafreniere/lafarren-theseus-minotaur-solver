@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright 2010, Darren Lafreniere
+<http://www.lafarren.com/theseus-minotaur-solver/>
+
+This file is part of lafarren.com's Theseus and Minotaur Maze Solver,
+or tmmaze-solver.
+
+tmmaze-solver is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+tmmaze-solver is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmmaze-solver, named License.txt. If not, see
+<http://www.gnu.org/licenses/>.
+-->
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:ui="com.lafarren.tmmaze.ui.*"
+	creationComplete="onCreationComplete()"
+	deactivate="onDeactivate()"
+>
+	<mx:Fade id="fadeIn" duration="200" alphaFrom="0.0" alphaTo="1.0"/>
+	<mx:Fade id="fadeOut" duration="200" alphaFrom="1.0" alphaTo="0.0"/>
+	
+	<mx:VBox id="container">
+		<mx:HBox width="100%">
+			<mx:VBox width="100%" height="100%" >
+				<mx:Canvas width="100%" height="100%" />
+				<mx:Label id="mazeLabel" styleName="mazeLabel" width="100%" text="{m_game.maze.name}" />
+			</mx:VBox>
+			<mx:VBox>
+				<mx:LinkButton id="helpButton" click="m_helpPopUp.openModal()" label="Help" />
+				<mx:LinkButton id="mazePickerButton" click="openMazePicker()" label="Change" />
+				<mx:LinkButton id="mazeRestartButton" click="resetMaze()" label="Reset" />
+			</mx:VBox>
+		</mx:HBox>
+		
+		<mx:HRule width="100%" />
+		
+		<mx:HBox>
+			<mx:VBox>
+				<mx:Canvas id="rendererTarget" />
+				<mx:Label id="gameEndLabel" styleName="gameEndLabel" text="" width="100%" visible="false" showEffect="{fadeIn}" hideEffect="{fadeOut}" />
+			</mx:VBox>
+			
+			<mx:VRule height="100%" />
+			
+			<mx:VBox width="150" height="100%">
+				<mx:LinkButton id="solverButton" click="toggleSolver()" label="{solverContainer.visible ? 'Disable Solver' : 'Enable Solver'}" />
+				<mx:VBox id="solverContainer" width="100%" height="100%" visible="false" showEffect="{fadeIn}" hideEffect="{fadeOut}" show="onSolverContainerChange()" hide="onSolverContainerChange()">
+					<mx:HBox>
+						<mx:Label id="solutionLabel" styleName="solutionLabel" text="" />
+						<mx:LinkButton id="solutionAutoCompleteButton" click="toggleSolutionAutoComplete()" label="" visible="false" />
+					</mx:HBox>
+					<ui:SolutionPathContainer id="solutionPathContainer" />
+				</mx:VBox>
+			</mx:VBox>
+		</mx:HBox>
+	</mx:VBox>
+	
+	<mx:Script>
+		<![CDATA[
+		import flash.events.KeyboardEvent;
+		import flash.ui.Keyboard;
+		import mx.controls.RadioButton;
+		import mx.core.Application;
+		
+		import com.lafarren.tmmaze.controller.Minotaur;
+		import com.lafarren.tmmaze.controller.TheseusUser;
+		import com.lafarren.tmmaze.controller.TheseusUserEvent;
+		import com.lafarren.tmmaze.core.EntityType;
+		import com.lafarren.tmmaze.core.Game;
+		import com.lafarren.tmmaze.core.GameEvent;
+		import com.lafarren.tmmaze.core.MazeAnimated;
+		import com.lafarren.tmmaze.core.MazeDefinition;
+		import com.lafarren.tmmaze.core.MazeParser;
+		import com.lafarren.tmmaze.core.MoveType;
+		import com.lafarren.tmmaze.renderer.Renderer;
+		
+		[Embed(source="/../assets/mazes.xml", mimeType="application/octet-stream")]
+		private static const MazesXML:Class;
+		
+		private var m_helpPopUp:HelpPopUp;
+		private var m_renderer:Renderer;
+		private var m_mazeDefinitions:Vector.<MazeDefinition>;
+		private var m_mazePicker:MazePicker;
+		
+		[Bindable]
+		private var m_game:Game;
+		
+		public function onCreationComplete():void
+		{
+			// Initialize help pop-up
+			{
+				m_helpPopUp = new HelpPopUp();
+				m_helpPopUp.attachTo = this;
+			}
+			
+			// Create renderer
+			{
+				m_renderer = new Renderer();
+				m_renderer.target = this.rendererTarget
+			}
+			
+			// Initialize maze definitions and maze picker
+			{
+				m_mazeDefinitions = MazeParser.parse(XML(new MazesXML()));
+				if (m_mazeDefinitions.length > 0)
+				{
+					createGame(m_mazeDefinitions[0]);
+				}
+				
+				m_mazePicker = new MazePicker();
+				m_mazePicker.attachTo = this;
+				m_mazePicker.autoCenter = false;
+				m_mazePicker.mazeDefinitions = m_mazeDefinitions;
+				m_mazePicker.addEventListener(Event.CHANGE, onMazePickerChange);
+			}
+
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			FocusStack.focusStack.push(InteractiveObject(Application.application), true);
+			Application.application.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		}
+		
+		private function onDeactivate():void
+		{
+			m_helpPopUp.openModal();
+		}
+		
+		private function openMazePicker():void
+		{
+			m_mazePicker.openModal();
+			
+			var mazePickerButtonRect:Rectangle = this.mazePickerButton.getRect(this);
+			m_mazePicker.x = Math.max(mazePickerButtonRect.right - m_mazePicker.width, 0);
+			m_mazePicker.y = mazePickerButtonRect.bottom;
+		}
+		
+		private function onMazePickerChange(event:Event):void
+		{
+			createGame(m_mazePicker.selectedMazeDefinition);
+		}
+		
+		private function resetMaze():void
+		{
+			var mazeDefinition:MazeDefinition = null;
+			if (m_game && m_game.maze)
+			{
+				mazeDefinition = m_game.maze.cloneMazeDefinition();
+			}
+			
+			createGame(mazeDefinition);
+		}
+		
+		private function createGame(mazeDefinition:MazeDefinition):void
+		{
+			destroyGame();
+			
+			if (mazeDefinition)
+			{
+				m_game = new Game(new MazeAnimated(mazeDefinition));
+				m_game.addEventListener(GameEvent.BEGIN, onGameBegin);
+				m_game.addEventListener(GameEvent.END, onGameEnd);
+				
+				var theseusUser:TheseusUser = new TheseusUser(m_game);
+				theseusUser.addEventListener(TheseusUserEvent.SOLVER_BEGIN, onSolverBegin);
+				theseusUser.addEventListener(TheseusUserEvent.SOLVER_END, onSolverEnd);
+				theseusUser.addEventListener(TheseusUserEvent.SOLVER_SOLUTION_CHANGE, onSolverSolutionChange);
+				theseusUser.solverEnabled = solverContainer.visible;
+				m_game.setController(theseusUser);
+				m_game.setController(new Minotaur(m_game));
+				
+				m_renderer.game = m_game;
+			}
+		}
+		
+		private function destroyGame():void
+		{
+			if (m_game)
+			{
+				m_renderer.game = null;
+				
+				var theseusUser:TheseusUser = this.theseusUser;
+				if (theseusUser)
+				{
+					theseusUser.removeEventListener(TheseusUserEvent.SOLVER_BEGIN, onSolverBegin);
+					theseusUser.removeEventListener(TheseusUserEvent.SOLVER_END, onSolverEnd);
+					theseusUser.removeEventListener(TheseusUserEvent.SOLVER_SOLUTION_CHANGE, onSolverSolutionChange);
+				}
+				
+				m_game.removeEventListener(GameEvent.BEGIN, onGameBegin);
+				m_game.removeEventListener(GameEvent.END, onGameEnd);
+				m_game.destroy();
+				m_game = null;
+			}
+		}
+		
+		private function getNextMazeDefinition():MazeDefinition
+		{
+			var index:int = 0;
+			if (m_game)
+			{
+				// Find the next maze by finding the current
+				// maze's name in the MazeDefinition list, and
+				// using the next MazeDefinition after it.
+				var name:String = m_game.maze.name;
+				for (; index < m_mazeDefinitions.length; ++index)
+				{
+					if (m_mazeDefinitions[index].name == name)
+					{
+						break;
+					}
+				}
+				
+				index = (index + 1) % m_mazeDefinitions.length;
+			}
+			
+			return (m_mazeDefinitions && m_mazeDefinitions.length > 0)
+				? m_mazeDefinitions[index]
+				: null;
+		}
+		
+		private function get theseusUser():TheseusUser
+		{
+			return m_game ? (m_game.getController(EntityType.THESEUS) as TheseusUser) : null;
+		}
+		
+		private function onKeyDown(event:KeyboardEvent):void
+		{
+			event.stopPropagation();
+			switch (event.keyCode)
+			{
+				case Keyboard.SPACE:
+				case Keyboard.ENTER:
+				{
+					if (m_game)
+					{
+						if (m_game.hasSucceeded(EntityType.THESEUS))
+						{
+							event.stopImmediatePropagation();
+							createGame(getNextMazeDefinition());
+						}
+						else if (m_game.hasSucceeded(EntityType.MINOTAUR))
+						{
+							event.stopImmediatePropagation();
+							resetMaze();
+						}
+					}
+				}
+				break;
+				
+				case "H".charCodeAt():
+				case Keyboard.ESCAPE:
+				{
+					m_helpPopUp.openModal();
+				}
+				break;
+				
+				case "C".charCodeAt():
+					openMazePicker();
+				break;
+				
+				case "R".charCodeAt():
+					event.stopImmediatePropagation();
+					resetMaze();
+				break;
+				
+				case "E".charCodeAt():
+					toggleSolver();
+				break;
+				
+				case "G".charCodeAt():
+					toggleSolutionAutoComplete();
+				break;
+			}
+		}
+		
+		private function onEnterFrame(event:Event):void
+		{
+			if (m_game && Application.application.stage.focus == Application.application)
+			{
+				m_game.tick();
+			}
+		}
+		
+		private function onGameBegin(event:GameEvent):void
+		{
+			this.gameEndLabel.text = "";
+			this.gameEndLabel.visible = false;
+		}
+		
+		private function onGameEnd(event:GameEvent):void
+		{
+			if (m_game)
+			{
+				updateSolverFeedback();
+				
+				if (m_game.hasSucceeded(EntityType.THESEUS))
+				{
+					this.gameEndLabel.text = "Press space to proceed...";
+					this.gameEndLabel.visible = true;
+				}
+				else if (m_game.hasSucceeded(EntityType.MINOTAUR))
+				{
+					this.gameEndLabel.text = "Press space to reset...";
+					this.gameEndLabel.visible = true;
+				}
+				else
+				{
+					throw new Error("Unexpected condition!");
+				}
+			}
+		}
+		
+		private function toggleSolver():void
+		{
+			solverContainer.visible = !solverContainer.visible;
+		}
+		
+		private function onSolverContainerChange():void
+		{
+			var theseusUser:TheseusUser = this.theseusUser;
+			if (theseusUser)
+			{
+				theseusUser.solverEnabled = solverContainer.visible;
+				if (!theseusUser.solverEnabled)
+				{
+					theseusUser.autoComplete = false;
+				}
+				
+				updateSolverFeedback(theseusUser);
+			}
+		}
+		
+		private function onSolverBegin(event:TheseusUserEvent):void
+		{
+			updateSolverFeedback(event.theseusUser);
+		}
+		
+		private function onSolverEnd(event:TheseusUserEvent):void
+		{
+			// Don't bother calling updateSolverFeedback here, since this event
+			// is always paired with a solution change event.
+		}
+		
+		private function onSolverSolutionChange(event:TheseusUserEvent):void
+		{
+			updateSolverFeedback(event.theseusUser);
+		}
+		
+		private function toggleSolutionAutoComplete():void
+		{
+			var theseusUser:TheseusUser = this.theseusUser;
+			if (theseusUser && theseusUser.solverEnabled)
+			{
+				theseusUser.autoComplete = !theseusUser.autoComplete;
+				updateSolverFeedback();
+			}
+		}
+		
+		private function updateSolverFeedback(theseusUser:TheseusUser = null):void
+		{
+			if (!theseusUser)
+			{
+				theseusUser = this.theseusUser;
+			}
+			
+			if (theseusUser)
+			{
+				var solverEnabled:Boolean = theseusUser.solverEnabled;
+				var solutionPath:Vector.<MoveType> = theseusUser.solutionPath;
+				
+				// Render the solution's next move and whether or not Theseus
+				// is in danger.
+				{
+					var solutionPathNextMove:MoveType = solverEnabled ? theseusUser.solutionPathNextMove : null;
+					var isTheseusInDanger:Boolean = (solverEnabled && solutionPath == null);
+					
+					m_renderer.solutionPathNextMove = solutionPathNextMove;
+					m_renderer.isTheseusInDanger = isTheseusInDanger;
+				}
+				
+				if (solverEnabled)
+				{
+					// Update the solution label and solution auto-complete button
+					{
+						var solutionAutoCompleteButtonVisible:Boolean = false;
+						
+						if (m_game.hasSucceeded(EntityType.THESEUS))
+						{
+							this.solutionLabel.text = "You've escaped!";
+						}
+						else if (m_game.hasSucceeded(EntityType.MINOTAUR))
+						{
+							this.solutionLabel.text = "You've been eaten!";
+						}
+						else if (theseusUser.solving)
+						{
+							this.solutionLabel.text = "Finding solution...";
+						}
+						else if (theseusUser.solverSucceeded)
+						{
+							this.solutionLabel.text = "Solution found!";
+							solutionAutoCompleteButtonVisible = true;
+						}
+						else
+						{
+							this.solutionLabel.text = "No solution found";
+						}
+						
+						solutionAutoCompleteButton.visible = solutionAutoCompleteButtonVisible;
+						if (solutionAutoCompleteButtonVisible)
+						{
+							solutionAutoCompleteButton.label = theseusUser.autoComplete ? "STOP" : "GO";
+						}
+					}
+					
+					// Update the solution path container
+					this.solutionPathContainer.solutionPath = solutionPath;
+				}
+			}
+		}
+		]]>
+	</mx:Script>
+
+</mx:VBox>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright 2010, Darren Lafreniere
+<http://www.lafarren.com/theseus-minotaur-solver/>
+
+This file is part of lafarren.com's Theseus and Minotaur Maze Solver,
+or tmmaze-solver.
+
+tmmaze-solver is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+tmmaze-solver is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmmaze-solver, named License.txt. If not, see
+<http://www.gnu.org/licenses/>.
+-->
+<mx:Canvas
+	xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+		
+	<mx:Image id="dangerIcon" source="{IconDanger}" visible="false" />
+	<mx:Canvas id="pathIcons" width="100%" height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off" resize="onResize(event)" />
+	
+	<mx:Script>
+		
+		<![CDATA[
+		import mx.events.ResizeEvent;
+		
+		import com.lafarren.tmmaze.core.MoveType;
+		import com.lafarren.tmmaze.renderer.SolverIconComponent;
+		
+		[Embed(source="/../assets/icons/danger.png")]
+		private static const IconDanger:Class;
+		
+		private var m_solutionPath:Vector.<MoveType>;
+		
+		public function get solutionPath():Vector.<MoveType>
+		{
+			return m_solutionPath.concat();
+		}
+		
+		public function set solutionPath(solutionPath:Vector.<MoveType>):void
+		{
+			m_solutionPath = solutionPath ? solutionPath.concat() : null;
+			setMoveTypes();
+		}
+		
+		private function onResize(event:ResizeEvent):void
+		{
+			createPathIcons();
+		}
+		
+		private function createPathIcons():void
+		{
+			// Instead of creating and adding icon components each time the
+			// solution path changes, add as many icons as will fit right
+			// here. When the solution path changes later, their moveTypes
+			// will be updated.
+			
+			// Validate now so the canvas is the correct size.
+			this.validateNow();
+
+			this.pathIcons.removeAllChildren();
+			
+			const ALPHAS:Vector.<Number> = Vector.<Number>([1.0, 0.5, 0.25, 0.1]);
+			for (var i:int = 0, y:Number = 0; y < this.pathIcons.height; ++i)
+			{
+				var icon:SolverIconComponent = new SolverIconComponent();
+				y += icon.minHeight;
+				
+				icon.alpha = ALPHAS[Math.min(i, ALPHAS.length - 1)];
+				if (i == 0)
+				{
+					icon.strobe = true;
+				}
+				
+				this.pathIcons.addChild(icon);
+			}
+			
+			setMoveTypes();
+		}
+		
+		private function setMoveTypes():void
+		{
+			for (var i:int = 0, n:int = this.pathIcons.numChildren, y:Number = 0; i < n; ++i)
+			{
+				var icon:SolverIconComponent = SolverIconComponent(this.pathIcons.getChildAt(i));
+				if (m_solutionPath && i < solutionPath.length)
+				{
+					icon.moveType = solutionPath[i];
+					
+					// Solver icons pivot about their local origin. In order
+					// to properly display them inline in a column, they need
+					// to be inverse offset by their local space bounds.
+					var bounds:Rectangle = icon.bounds;
+					icon.x = -bounds.x;
+					icon.y = -bounds.y + y;
+					y += icon.height;
+				}
+				else
+				{
+					icon.moveType = null;
+				}
+			}
+			
+			dangerIcon.visible = (m_solutionPath == null);
+		}
+		]]>
+	</mx:Script>
+</mx:Canvas>

@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<mazes>
+	<maze>
+		<name>Maze 1 (3 x 3)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>---o</row>
+					<row>o-o-</row>
+					<row>o-o-</row>
+					<row>---o</row>
+				</horizontal>
+				<vertical>
+					<row>|oo|o</row>
+					<row>|o|oo</row>
+					<row>|oo|o</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>1</x>
+					<y>2</y>
+				</position>
+				<position id="minotaur">
+					<x>1</x>
+					<y>0</y>
+				</position>
+				<position id="exit">
+					<x>3</x>
+					<y>1</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Maze 2 (7 x 4)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>-------</row>
+					<row>ooooooo</row>
+					<row>o-ooooo</row>
+					<row>ooooo-o</row>
+					<row>-o-----</row>
+				</horizontal>
+				<vertical>
+					<row>|oooooo|</row>
+					<row>|||oooo|</row>
+					<row>|oooo|||</row>
+					<row>|oooooo|</row>
+					<row>o||ooooo</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>2</x>
+					<y>1</y>
+				</position>
+				<position id="minotaur">
+					<x>0</x>
+					<y>1</y>
+				</position>
+				<position id="exit">
+					<x>1</x>
+					<y>4</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Maze 3 (3 x 4)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>---o</row>
+					<row>o-o-</row>
+					<row>ooo-</row>
+					<row>-ooo</row>
+					<row>---o</row>
+				</horizontal>
+				<vertical>
+					<row>|oo|o</row>
+					<row>|oooo</row>
+					<row>||o|o</row>
+					<row>|oo|o</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>1</x>
+					<y>1</y>
+				</position>
+				<position id="minotaur">
+					<x>1</x>
+					<y>0</y>
+				</position>
+				<position id="exit">
+					<x>3</x>
+					<y>1</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Maze 4 (5 x 5)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>ooooo</row>
+					<row>---o-</row>
+					<row>ooo-o</row>
+					<row>o-ooo</row>
+					<row>o--oo</row>
+					<row>ooo-o</row>
+					<row>-----</row>
+				</horizontal>
+				<vertical>
+					<row>ooo||o</row>
+					<row>||ooo|</row>
+					<row>|o|o||</row>
+					<row>|oo|o|</row>
+					<row>|oo|||</row>
+					<row>|oooo|</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>1</x>
+					<y>1</y>
+				</position>
+				<position id="minotaur">
+					<x>4</x>
+					<y>2</y>
+				</position>
+				<position id="exit">
+					<x>3</x>
+					<y>0</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Maze 5 (7 x 5)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>ooooooo</row>
+					<row>-----o-</row>
+					<row>ooooo-o</row>
+					<row>o-ooo-o</row>
+					<row>oo-oo-o</row>
+					<row>oo---oo</row>
+					<row>-------</row>
+				</horizontal>
+				<vertical>
+					<row>ooooo||o</row>
+					<row>|ooo|o||</row>
+					<row>||oo|oo|</row>
+					<row>|oo|oo||</row>
+					<row>|o|o||o|</row>
+					<row>|oooooo|</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>2</x>
+					<y>1</y>
+				</position>
+				<position id="minotaur">
+					<x>2</x>
+					<y>4</y>
+				</position>
+				<position id="exit">
+					<x>5</x>
+					<y>0</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Maze 6 (6 x 6)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>oooooo</row>
+					<row>----o-</row>
+					<row>-ooooo</row>
+					<row>o-oo-o</row>
+					<row>oo-o-o</row>
+					<row>oo-ooo</row>
+					<row>oooooo</row>
+					<row>------</row>
+				</horizontal>
+				<vertical>
+					<row>oooo||o</row>
+					<row>|oooo||</row>
+					<row>|o|o|||</row>
+					<row>||||oo|</row>
+					<row>||oo|o|</row>
+					<row>|||ooo|</row>
+					<row>|ooooo|</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>0</x>
+					<y>1</y>
+				</position>
+				<position id="minotaur">
+					<x>4</x>
+					<y>3</y>
+				</position>
+				<position id="exit">
+					<x>4</x>
+					<y>0</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Maze 7 (6 x 6)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>oooooo</row>
+					<row>-o----</row>
+					<row>o-oo-o</row>
+					<row>oooo-o</row>
+					<row>oooooo</row>
+					<row>-ooo-o</row>
+					<row>oo-ooo</row>
+					<row>------</row>
+				</horizontal>
+				<vertical>
+					<row>o||oooo</row>
+					<row>|oooo||</row>
+					<row>|oo|oo|</row>
+					<row>|oo|o||</row>
+					<row>||oo|||</row>
+					<row>|oooo||</row>
+					<row>|ooooo|</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>4</x>
+					<y>5</y>
+				</position>
+				<position id="minotaur">
+					<x>0</x>
+					<y>5</y>
+				</position>
+				<position id="exit">
+					<x>1</x>
+					<y>0</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Maze 8 (9 x 8)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>---------</row>
+					<row>--ooooo-o</row>
+					<row>oo-oooo-o</row>
+					<row>o-oo---oo</row>
+					<row>-oo-oo---</row>
+					<row>oo-o----o</row>
+					<row>o-o-oo---</row>
+					<row>ooo-o---o</row>
+					<row>-o-------</row>
+				</horizontal>
+				<vertical>
+					<row>|ooo|o|oo|</row>
+					<row>|o|||||o||</row>
+					<row>||o|o|o|o|</row>
+					<row>|o||o|ooo|</row>
+					<row>|||oo|ooo|</row>
+					<row>|o|o|oooo|</row>
+					<row>|||o||ooo|</row>
+					<row>||oooo|oo|</row>
+					<row>o||ooooooo</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>0</x>
+					<y>0</y>
+				</position>
+				<position id="minotaur">
+					<x>2</x>
+					<y>2</y>
+				</position>
+				<position id="exit">
+					<x>1</x>
+					<y>8</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Maze 9 (9 x 8)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>ooooooooo</row>
+					<row>---o-----</row>
+					<row>--ooo-ooo</row>
+					<row>ooooooooo</row>
+					<row>ooo-ooooo</row>
+					<row>o-ooooooo</row>
+					<row>ooooooo-o</row>
+					<row>ooooooooo</row>
+					<row>ooo-ooooo</row>
+					<row>---------</row>
+				</horizontal>
+				<vertical>
+					<row>ooo||oooo|</row>
+					<row>|oooooooo|</row>
+					<row>|oooooooo|</row>
+					<row>|oooooooo|</row>
+					<row>||o||ooo||</row>
+					<row>||oooooo||</row>
+					<row>||oooooo||</row>
+					<row>|ooooooo||</row>
+					<row>|oooooooo|</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>8</x>
+					<y>1</y>
+				</position>
+				<position id="minotaur">
+					<x>0</x>
+					<y>1</y>
+				</position>
+				<position id="exit">
+					<x>3</x>
+					<y>0</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Maze 10 (8 x 8)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>---------</row>
+					<row>-ooooo-o-</row>
+					<row>ooooooooo</row>
+					<row>ooooooooo</row>
+					<row>oo-ooo-oo</row>
+					<row>ooooooooo</row>
+					<row>o-ooooo-o</row>
+					<row>o-ooo-ooo</row>
+					<row>o--------</row>
+				</horizontal>
+				<vertical>
+					<row>oo|oooooo|</row>
+					<row>o|oooooo||</row>
+					<row>o|oooo|oo|</row>
+					<row>o|ooo|ooo|</row>
+					<row>o|oo|oooo|</row>
+					<row>o|||ooo|o|</row>
+					<row>o|o|o|ooo|</row>
+					<row>o|oooo|oo|</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>2</x>
+					<y>1</y>
+				</position>
+				<position id="minotaur">
+					<x>1</x>
+					<y>0</y>
+				</position>
+				<position id="exit">
+					<x>0</x>
+					<y>0</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Robert Abbott&apos;s Original Maze (14 x 9)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>--------------o</row>
+					<row>--oooo-o--o--o-</row>
+					<row>ooo-oo-o-----o-</row>
+					<row>oo-ooo-ooo--ooo</row>
+					<row>oo-oooooo---ooo</row>
+					<row>ooooooooo--oooo</row>
+					<row>ooooooooo--oooo</row>
+					<row>ooooooooo--oooo</row>
+					<row>ooooooooo--oooo</row>
+					<row>--------------o</row>
+				</horizontal>
+				<vertical>
+					<row>|oooo|ooo|oooo|</row>
+					<row>|||||||oooo|ooo</row>
+					<row>|ooooooooooooo|</row>
+					<row>|||o||oo||ooo||</row>
+					<row>|||o|||||ooo|||</row>
+					<row>||||o||ooooo|||</row>
+					<row>|||||||||ooo|||</row>
+					<row>|||||||||ooo|||</row>
+					<row>|ooooooooooooo|</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>0</x>
+					<y>4</y>
+				</position>
+				<position id="minotaur">
+					<x>13</x>
+					<y>4</y>
+				</position>
+				<position id="exit">
+					<x>14</x>
+					<y>1</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+	<maze>
+		<name>Toby Nelson&apos;s Dread Maze (14 x 9)</name>
+		<data>
+			<walls>
+				<horizontal>
+					<row>--------------o</row>
+					<row>ooo-o--oo-o--oo</row>
+					<row>o--ooo-oo-ooooo</row>
+					<row>ooo--o-o-oooooo</row>
+					<row>oooooo-oooooooo</row>
+					<row>oooooooooooo---</row>
+					<row>o---oooooooooo-</row>
+					<row>--oo--oo-o-o-oo</row>
+					<row>oooo--ooo---ooo</row>
+					<row>--------------o</row>
+				</horizontal>
+				<vertical>
+					<row>|o|ooooooo|ooo|</row>
+					<row>||oo||oo|o|||||</row>
+					<row>|o|ooooooo||oo|</row>
+					<row>||ooo||oo|o||||</row>
+					<row>||||||o|||||oo|</row>
+					<row>|oooo||o||||||o</row>
+					<row>|ooo|oo|oo|oo||</row>
+					<row>|||||oo|ooooo||</row>
+					<row>|ooooooo|ooooo|</row>
+				</vertical>
+			</walls>
+			<positions>
+				<position id="theseus">
+					<x>12</x>
+					<y>5</y>
+				</position>
+				<position id="minotaur">
+					<x>6</x>
+					<y>3</y>
+				</position>
+				<position id="exit">
+					<x>14</x>
+					<y>5</y>
+				</position>
+			</positions>
+		</data>
+	</maze>
+</mazes>

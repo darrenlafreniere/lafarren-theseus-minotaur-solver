@@ -1,0 +1,92 @@
+/*
+Copyright 2010, Darren Lafreniere
+<http://www.lafarren.com/theseus-minotaur-solver/>
+
+This file is part of lafarren.com's Theseus and Minotaur Maze Solver,
+or tmmaze-solver.
+
+tmmaze-solver is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+tmmaze-solver is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmmaze-solver, named License.txt. If not, see
+<http://www.gnu.org/licenses/>.
+*/
+LinkButton
+{
+	color: #004488;
+	textRollOverColor: #0088AA;
+	left: 0;
+	leading: 0;
+	paddingLeft: 0;
+	paddingRight: 0;
+	paddingBottom: 0;
+	paddingTop: 0;
+	textAlign: left;
+}
+
+.mazeLabel
+{
+	fontSize: 32;
+	fontWeight: bold;
+	textAlign: center;
+}
+
+.gameEndLabel
+{
+	color: #880000;
+	fontWeight: bold;
+	textAlign: center;
+}
+
+.solutionLabel
+{
+	fontWeight: bold;
+}
+
+.dismissButton
+{
+	fontSize: 14px;
+}
+
+.helpH1
+{
+	fontSize: 18px;
+	fontWeight: bold;
+}
+
+.helpTab
+{
+	fontSize: 12px;
+	fontWeight: bold;
+}
+
+.helpTabActive
+{
+	fontSize: 12px;
+	fontWeight: bold;
+	color: #4488CC;
+	textRollOverColor: #88AAFF;
+}
+
+.helpContainer
+{
+	paddingLeft: 20px;
+	paddingTop: 10px;
+	paddingRight: 20px;
+	paddingBottom: 10px;
+}
+
+.helpDismissButton
+{
+	fontSize: 14px;
+	horizontalCenter: 0;
+	bottom: 10;
+}

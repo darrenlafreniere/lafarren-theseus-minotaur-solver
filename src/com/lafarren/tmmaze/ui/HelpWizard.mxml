@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright 2010, Darren Lafreniere
+<http://www.lafarren.com/theseus-minotaur-solver/>
+
+This file is part of lafarren.com's Theseus and Minotaur Maze Solver,
+or tmmaze-solver.
+
+tmmaze-solver is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+tmmaze-solver is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmmaze-solver, named License.txt. If not, see
+<http://www.gnu.org/licenses/>.
+-->
+<mx:Canvas
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:ui="com.lafarren.tmmaze.ui.*"
+	keyDown="onKeyDown(event)"
+	creationComplete="onCreationComplete()">
+	
+	<mx:Canvas width="380" height="270" horizontalCenter="0" verticalCenter="0">
+		<ui:HelpContents id="contents" />
+	</mx:Canvas>
+	
+	<mx:Script>
+		<![CDATA[
+		import flash.events.MouseEvent;
+		import mx.controls.LinkButton;
+		import mx.core.Application;
+		import mx.core.Container;
+		import mx.events.CloseEvent;
+		import mx.events.FlexEvent;
+		
+		[Embed(source="/../assets/images/controls-space.png")]
+		[Bindable]
+		public var ImageControlsSpace:Class;
+		
+		[Embed(source="/../assets/images/controls-arrows.png")]
+		[Bindable]
+		public var ImageControlsArrows:Class;
+		
+		private var m_hasShownControls:Boolean;
+		
+		public function onCreationComplete():void
+		{
+			this.contents.rulesButton.addEventListener(MouseEvent.CLICK, onRulesButtonClick);
+			this.contents.controlsButton.addEventListener(MouseEvent.CLICK, onControlsButtonClick);
+			this.contents.dismissButton.addEventListener(MouseEvent.CLICK, onDismissButtonClick);
+			this.contents.controlsContainer.addEventListener(FlexEvent.SHOW, onControlsContainerShow);
+			
+			this.contents.showContainer(this.contents.rulesContainer);
+			
+			this.contents.dismissButton.label = "Next";
+			FocusStack.focusStack.push(this, true);
+		}
+		
+		private function progress():void
+		{
+			if (!m_hasShownControls)
+			{
+				this.contents.showContainer(this.contents.controlsContainer);
+			}
+			else
+			{
+				FocusStack.focusStack.remove(this);
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+		}
+		
+		private function onRulesButtonClick(event:MouseEvent):void
+		{
+			this.contents.showContainer(this.contents.rulesContainer);
+		}
+		
+		private function onControlsButtonClick(event:MouseEvent):void
+		{
+			this.contents.showContainer(this.contents.controlsContainer);
+		}
+		
+		private function onDismissButtonClick(event:MouseEvent):void
+		{
+			progress();
+		}
+		
+		private function onControlsContainerShow(event:FlexEvent):void
+		{
+			m_hasShownControls = true;
+			this.contents.dismissButton.label = "Ok";
+		}
+		
+		private function onKeyDown(event:KeyboardEvent):void
+		{
+			event.stopImmediatePropagation();
+			switch (event.keyCode)
+			{
+				case Keyboard.LEFT:
+				case Keyboard.UP:
+				case "A".charCodeAt():
+				case "W".charCodeAt():
+					this.contents.showContainer(this.contents.rulesContainer);
+				break;
+				
+				case Keyboard.RIGHT:
+				case Keyboard.DOWN:
+				case "D".charCodeAt():
+				case "S".charCodeAt():
+					this.contents.showContainer(this.contents.controlsContainer);
+				break;
+				
+				case Keyboard.ESCAPE:
+				case Keyboard.SPACE:
+				case Keyboard.ENTER:
+					progress();
+				break;
+			}
+		}
+		]]>
+	</mx:Script>
+</mx:Canvas>

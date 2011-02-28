@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright 2010, Darren Lafreniere
+<http://www.lafarren.com/theseus-minotaur-solver/>
+
+This file is part of lafarren.com's Theseus and Minotaur Maze Solver,
+or tmmaze-solver.
+
+tmmaze-solver is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+tmmaze-solver is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmmaze-solver, named License.txt. If not, see
+<http://www.gnu.org/licenses/>.
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+	<mx:Label styleName="helpH1" text="Theseus and the Minotaur" width="100%" textAlign="center" />
+	
+	<mx:Canvas width="100%">
+		<mx:HBox horizontalCenter="0">
+			<mx:LinkButton id="rulesButton" label="Rules" />
+			<mx:VRule height="20" />
+			<mx:LinkButton id="controlsButton" label="Controls" />
+		</mx:HBox>
+	</mx:Canvas>
+	
+	<mx:VBox id="rulesContainer" styleName="helpContainer" width="100%" height="100%" visible="false">
+		<mx:Text width="100%">
+			<mx:htmlText>
+				<![CDATA[<p>As Theseus, you must escape the Minotaur's maze!</p><br/><p>For every move you make, the Minotaur makes two moves. Luckily, he isn't terribly bright. He will move toward Theseus, favoring horizontal over vertical moves, without knowing how to get around a wall in his way. Escape by luring the Minotaur into a place where he gets stuck!</p><br/><p align="center">Concept: Robert Abbott<br/>Code: Darren Lafreniere</p>]]>
+			</mx:htmlText>
+		</mx:Text>
+	</mx:VBox>
+	
+	<mx:Canvas id="controlsContainer" width="100%" height="100%" visible="false">
+		<mx:HBox styleName="helpContainer" horizontalCenter="0">
+			<mx:VBox>
+				<mx:Image source="{ImageControlsSpace}"/>
+				<mx:Text width="100%" textAlign="center">
+					<mx:htmlText>
+						<![CDATA[Use the <b>spacebar</b> to skip a turn.]]>
+					</mx:htmlText>
+				</mx:Text>
+			</mx:VBox>
+			<mx:VBox>
+				<mx:Image source="{ImageControlsArrows}"/>
+				<mx:Text width="100%" textAlign="center">
+					<mx:htmlText>
+						<![CDATA[Use the <b>arrow keys</b> to move.]]>
+					</mx:htmlText>
+				</mx:Text>
+			</mx:VBox>
+		</mx:HBox>
+	</mx:Canvas>
+	
+	<mx:Canvas width="100%">
+		<mx:Button id="dismissButton" styleName="helpDismissButton" label="" width="50%" />
+	</mx:Canvas>
+	
+	<mx:Script>
+		<![CDATA[
+		import mx.core.Container;
+		import mx.controls.LinkButton;
+		
+		[Embed(source="/../assets/images/controls-space.png")]
+		[Bindable]
+		public var ImageControlsSpace:Class;
+		
+		[Embed(source="/../assets/images/controls-arrows.png")]
+		[Bindable]
+		public var ImageControlsArrows:Class;
+		
+		public function showContainer(show:Container):void
+		{
+			var buttons:Vector.<LinkButton> = Vector.<LinkButton>([this.rulesButton, this.controlsButton]);
+			var containers:Vector.<Container> = Vector.<Container>([this.rulesContainer, this.controlsContainer]);
+			containers.forEach
+			(
+				function(container:Container, index:int, vector:Vector.<Container>):void
+				{
+					var match:Boolean = (container == show);
+					
+					buttons[index].styleName = match ? "helpTabActive" : "helpTab";
+					
+					container.visible = match;
+					container.includeInLayout = match;
+				}
+			);
+		}
+		]]>
+	</mx:Script>
+</mx:VBox>

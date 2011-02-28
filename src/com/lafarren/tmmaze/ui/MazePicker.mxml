@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright 2010, Darren Lafreniere
+<http://www.lafarren.com/theseus-minotaur-solver/>
+
+This file is part of lafarren.com's Theseus and Minotaur Maze Solver,
+or tmmaze-solver.
+
+tmmaze-solver is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+tmmaze-solver is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmmaze-solver, named License.txt. If not, see
+<http://www.gnu.org/licenses/>.
+-->
+<ui:PopUp
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:ui="com.lafarren.tmmaze.ui.*"
+	layout="vertical" 
+	title="Mazes">
+	
+	<mx:List id="mazeControl" initialize="onMazeControlCreationComplete()" itemClick="onMazeControlItemClick(event)" keyDown="onMazeControlKeyDown(event)" />
+	
+	<mx:Script>
+		<![CDATA[
+		import flash.events.Event;
+		import flash.events.KeyboardEvent;
+		import flash.events.MouseEvent;
+		import flash.ui.Keyboard;
+		import mx.collections.ArrayCollection;
+		import mx.core.Application;
+		import mx.events.ListEvent;
+		import mx.managers.PopUpManager;
+		
+		import com.lafarren.tmmaze.core.MazeDefinition;
+		
+		private var m_mazeDefinitions:Vector.<MazeDefinition>;
+		private var m_selectedIndexWhenOpened:int;
+		
+		public override function open(modal:Boolean):void
+		{
+			super.open(modal);
+			Application.application.stage.focus = this.mazeControl;
+			m_selectedIndexWhenOpened = this.mazeControl.selectedIndex;
+		}
+		
+		public function get selectedMazeDefinition():MazeDefinition
+		{
+			return this.mazeControl.selectedItem
+				? this.mazeControl.selectedItem.mazeDefinition
+				: null;
+		}
+		
+		public function set mazeDefinitions(mazeDefinitions:Vector.<MazeDefinition>):void
+		{
+			m_mazeDefinitions = mazeDefinitions;
+			refreshMazeControl();
+		}
+		
+		private function refreshMazeControl():void
+		{
+			if (this.mazeControl)
+			{
+				var selectedMazeDefinitionOld:MazeDefinition = this.selectedMazeDefinition;
+				
+				var dataProvider:ArrayCollection = new ArrayCollection();
+				var selectedIndexNew:int = 0;
+				
+				m_mazeDefinitions.forEach
+				(
+					function(mazeDefinition:MazeDefinition, index:int, vector:Vector.<MazeDefinition>):void
+					{
+						var data:Object = new Object();
+						data.label = mazeDefinition.name;
+						data.mazeDefinition = mazeDefinition;
+						dataProvider.addItem(data);
+						
+						if (mazeDefinition == selectedMazeDefinitionOld)
+						{
+							selectedIndexNew = index;
+						}
+					}
+				);
+				
+				this.mazeControl.dataProvider = dataProvider;
+				this.mazeControl.selectedIndex = selectedIndexNew;
+				this.mazeControl.width = this.mazeControl.measureWidthOfItems() + 32; // hacky, add extra for scrollbar width
+			}
+		}
+		
+		private function pick():void
+		{
+			dispatchEvent(new Event(Event.CHANGE));
+			close();
+		}
+		
+		private function onMazeControlCreationComplete():void
+		{
+			refreshMazeControl();
+		}
+		
+		private function onMazeControlItemClick(event:ListEvent):void
+		{
+			pick();
+		}
+		
+		private function onMazeControlKeyDown(event:KeyboardEvent):void
+		{
+			switch (event.keyCode)
+			{
+				case "A".charCodeAt():
+				case "W".charCodeAt():
+					this.mazeControl.selectedIndex = Math.max(this.mazeControl.selectedIndex - 1, 0);
+					this.mazeControl.scrollToIndex(this.mazeControl.selectedIndex);
+				break;
+				
+				case "D".charCodeAt():
+				case "S".charCodeAt():
+					this.mazeControl.selectedIndex = Math.min(this.mazeControl.selectedIndex + 1, m_mazeDefinitions.length - 1);
+					this.mazeControl.scrollToIndex(this.mazeControl.selectedIndex);
+				break;
+				
+				case Keyboard.ESCAPE:
+					this.mazeControl.selectedIndex = m_selectedIndexWhenOpened;
+					close();
+				break;
+				
+				case Keyboard.SPACE:
+				case Keyboard.ENTER:
+					pick();
+				break;
+			}
+		}
+		]]>
+	</mx:Script>
+</ui:PopUp>

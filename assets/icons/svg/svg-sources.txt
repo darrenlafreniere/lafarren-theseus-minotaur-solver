@@ -1,0 +1,15 @@
+theseus icons:
+http://commons.wikimedia.org/wiki/File:Emblem-fun.svg
+http://commons.wikimedia.org/wiki/File:Emblem-ohno.svg
+
+minotaur icon:
+http://commons.wikimedia.org/wiki/File:Red_Light_Icon.svg
+
+arrow icon:
+http://commons.wikimedia.org/wiki/File:Gtk-go-forward-ltr.svg
+
+skip icon modified from:
+http://commons.wikimedia.org/wiki/File:Gtk-goto-last-ltr.svg
+
+danger icon:
+http://commons.wikimedia.org/wiki/File:Nuvola_apps_important.svg

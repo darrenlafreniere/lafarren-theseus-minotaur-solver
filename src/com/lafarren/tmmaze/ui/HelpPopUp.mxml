@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright 2010, Darren Lafreniere
+<http://www.lafarren.com/theseus-minotaur-solver/>
+
+This file is part of lafarren.com's Theseus and Minotaur Maze Solver,
+or tmmaze-solver.
+
+tmmaze-solver is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+tmmaze-solver is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with tmmaze-solver, named License.txt. If not, see
+<http://www.gnu.org/licenses/>.
+-->
+<ui:PopUp
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:ui="com.lafarren.tmmaze.ui.*"
+	layout="vertical" 
+	title="Help"
+	keyDown="onKeyDown(event)"
+	width="400"
+	height="320">
+	
+	<ui:HelpContents id="contents" />
+	
+	<mx:Script>
+		<![CDATA[
+		import flash.events.MouseEvent;
+		import mx.controls.LinkButton;
+		import mx.core.Application;
+		import mx.core.Container;
+		
+		[Embed(source="/../assets/images/controls-space.png")]
+		[Bindable]
+		public var ImageControlsSpace:Class;
+		
+		[Embed(source="/../assets/images/controls-arrows.png")]
+		[Bindable]
+		public var ImageControlsArrows:Class;
+		
+		public override function open(modal:Boolean):void
+		{
+			super.open(modal);
+			
+			this.contents.rulesButton.addEventListener(MouseEvent.CLICK, onRulesButtonClick);
+			this.contents.controlsButton.addEventListener(MouseEvent.CLICK, onControlsButtonClick);
+			this.contents.dismissButton.addEventListener(MouseEvent.CLICK, onDismissButtonClick);
+			
+			this.contents.showContainer(this.contents.rulesContainer);
+			
+			// The initial auto-display of the help menu should have an "Ok"
+			// button. Subsequent displays should have a "Resume" button.
+			this.contents.dismissButton.label = "Resume";
+		}
+		
+		private function onRulesButtonClick(event:MouseEvent):void
+		{
+			this.contents.showContainer(this.contents.rulesContainer);
+		}
+		
+		private function onControlsButtonClick(event:MouseEvent):void
+		{
+			this.contents.showContainer(this.contents.controlsContainer);
+		}
+		
+		private function onDismissButtonClick(event:MouseEvent):void
+		{
+			close();
+		}
+		
+		private function onKeyDown(event:KeyboardEvent):void
+		{
+			event.stopImmediatePropagation();
+			switch (event.keyCode)
+			{
+				case Keyboard.LEFT:
+				case Keyboard.UP:
+				case "A".charCodeAt():
+				case "W".charCodeAt():
+					this.contents.showContainer(this.contents.rulesContainer);
+				break;
+				
+				case Keyboard.RIGHT:
+				case Keyboard.DOWN:
+				case "D".charCodeAt():
+				case "S".charCodeAt():
+					this.contents.showContainer(this.contents.controlsContainer);
+				break;
+				
+				case Keyboard.ESCAPE:
+				case Keyboard.SPACE:
+				case Keyboard.ENTER:
+					close();
+				break;
+			}
+		}
+		]]>
+	</mx:Script>
+</ui:PopUp>
